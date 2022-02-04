@@ -1,0 +1,97 @@
+create table book(bno int primary key,title varchar(20),author varchar(20),price int,check(price>0),pu_year int);
+
+Insert into book values(101,’C programming’, ’Yashwant Kantekar’,’524’,’1995’);
+
+Insert into book values(102,’Database’,’Korth’,’124’,’2013’);
+
+Insert into book values(103,’Finance Accounting’,’Sachin’,’322’,’2014’);
+
+Insert into book values(104,’OB’,’Alok’,’824’,’2015’);
+
+Insert into book values(105,’E Commerce’,’Khan’,’254’,’2012’);
+
+Create table cust(cid int primary key,cname varchar(20),addr varchar(20));
+
+Insert into cust values(201,’alok’,’pune’);
+
+Insert into cust values(202,’atual’,’pimpri’);
+
+Insert into cust values(203,’neetin’,’pune’);
+
+Insert into cust values(204,’seema’,’hadapsar’);
+
+Insert into cust values(205,’geeta’,’bhosari’)
+
+Create table bc1(bno int references book,cid int references cust1,quantity int);
+
+SQL> select * from book;
+
+       BNO TITLE                AUTHOR                    PRICE    PU_YEAR
+---------- -------------------- -------------------- ---------- ----------
+       101 C programming        Yashwant Kantekar           524       1995
+       102 Database             Korth                       124       2013
+       103 Finance Accounting   Sachin                      322       2014
+       104 OB                   Alok                        824       2015
+       105 E Commerce           Khan                        254       2012
+
+SQL> select * from cust1;
+
+       CID CNAME                ADDR
+---------- -------------------- --------------------
+       201 alok                 pune
+       202 atual                pimpri
+       203 neetin               pune
+       204 seema                hadapsar
+       205 geeta                bhosari
+
+SQL> select * from bc1;
+
+       BNO        CID   QUANTITY
+---------- ---------- ----------
+       101        201          3
+       102        202          2
+       103        203          4
+       104        204          1
+       105        205         30
+
+SQL> select * from cust where addr='mumbai';
+
+       CNO CNAME           ADDR
+---------- --------------- ---------------
+       206 seeman          mumbai
+
+SQL> select author,title from book order by author;
+
+AUTHOR               TITLE
+-------------------- --------------------
+Alok                 OB
+Khan                 E Commerce
+Korth                Database
+Sachin               Finance Accounting
+Yashwant Kantekar    C programming
+
+SQL>  select cname from cust1,book,bc1 where cust1.cid=bc1.cid and book.bno=bc1.bno and pu_year='2013' group by cname;
+
+CNAME
+--------------------
+atual
+
+SQL> select cname from cust1,bc1 where quantity>3 and cust1.cid=bc1.cid;
+
+CNAME
+--------------------
+neetin
+geeta
+
+SQL> select title,price,pu_year from book where pu_year='2013' and price between 100 and 200;
+
+TITLE                     PRICE    PU_YEAR
+-------------------- ---------- ----------
+Database                    124       2013
+
+
+
+
+
+
+

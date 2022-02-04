@@ -1,0 +1,92 @@
+SQL> create table department(dept_no int primary key,dept_name varchar(15),location varchar(15));
+
+Table created.
+
+SQL> create table employee1(emp_no int primary key,emp_name varchar(15),addr varchar(15),salary int,check(salary>0),designation varchar(15));
+
+Table created.
+
+SQL> alter table employee1 add dept_no int references department;
+
+Table altered.
+
+SQL> insert into department values(101,'science','lohegaon');
+
+1 row created.
+
+
+SQL> insert into department values(102,'computerscience','wagholi');
+
+1 row created.
+
+SQL> insert into department values(104,'baiology','baner');
+
+1 row created.
+
+SQL> insert into department values(105,'maths','baner');
+
+1 row created.
+
+
+SQL> insert into employee1 values(1,'vjay','lohegaon',20000,'manager',102);
+
+1 row created.
+
+SQL> insert into employee1 values(2,'raj','lohegaon',10000,'clerk',102);
+
+1 row created.
+
+SQL> insert into employee1 values(3,'pandit','lohegaon',10000,'clerk',104);
+
+1 row created.
+
+SQL> insert into employee1 values(4,'ram','wagholi',20000,'manager',105);
+
+1 row created.
+
+SQL> insert into employee1 values(5,'sham','wagholi',15000,'junior_manager',105);
+
+1 row created.
+
+SQL> insert into employee1 values(6,'rakesh','wagholi',15000,'junior_manager',104);
+
+1 row created.
+
+SQL> select * from department;
+
+   DEPT_NO DEPT_NAME       LOCATION
+---------- --------------- ---------------
+       101 science         lohegaon
+       102 computerscience wagholi
+       104 baiology        baner
+       105 maths           baner
+
+SQL> select * from employee1;
+
+    EMP_NO EMP_NAME        ADDR                SALARY DESIGNATION        DEPT_NO
+---------- --------------- --------------- ---------- --------------- ----------
+         1 vjay            lohegaon             20000 manager                102
+         2 raj             lohegaon             10000 clerk                  102
+         3 pandit          lohegaon             10000 clerk                  104
+         4 ram             wagholi              20000 manager                105
+         5 sham            wagholi              15000 junior_manager         105
+         6 rakesh          wagholi              15000 junior_manager         104
+
+6 rows selected.
+
+SQL> select sum(salary) from employee1,department where department.dept_no=employee1.dept_no and dept_name='computerscience';
+
+SUM(SALARY)
+-----------
+      30000
+
+SQL> select avg(salary) from department,employee1 where department.dept_no=employee1.dept_no group by dept_name having avg(sal)>10000;
+
+AVG(SALARY)
+-----------
+      20000
+      17500
+      15000
+
+
+

@@ -1,0 +1,141 @@
+create table employee(emp_no int primary key,name varchar(15),skill varchar(15),payrate int,check(payrate>0));
+
+Table created.
+
+Insert into employee values(1,’seema’,’manager’,25423);
+
+Insert into employee values(2,’sheeta’,’supervisor’,56478);
+
+Insert into employee values(3,’geeta’,’cleark’,65423);
+
+Insert into employee values(4,’suhas’,’chef’,55423);
+
+Insert into employee values(5,’sachin’,’waiter’,27423);
+
+create table position(posting_no int primary key,skill varchar(15));
+
+Table created.
+
+Insert into position values(201,’manager’);
+
+Insert into position values(202,’supervisor’);
+
+Insert into position values(203,’cleark’);
+
+Insert into position values(204,’chef’);
+
+Insert into position values(205,’waiter’);
+
+create table ep(empno int references employee,postingno int references position,day varchar(10),shift varchar(10),primary key(empno,postingno));
+
+Table created.
+
+Insert into ep values (1,201,’Monday’,’allocate’);
+
+Insert into ep values (2,202,’Tuesday’,’notallocat’);
+
+Insert into ep values (3,203,’Friday’,’allocate’);
+
+Insert into epvalues (4,204,’Monday’,’allocate’);
+
+Insert into ep values (5,205,’Friday’,’notallocat’);
+
+SQL> select * from employee;
+
+    EMP_NO NAME            SKILL              PAYRATE
+---------- --------------- --------------- ----------
+         1 seema           manager              25423
+         2 sheeta          supervisor           56478
+         3 geeta           cleark               65423
+         4 suhas           chef                 55423
+         5 sachin          waiter               27423
+
+SQL> select * from position;
+
+POSTING_NO SKILL
+---------- ---------------
+       201 manager
+       202 supervisor
+       203 cleark
+       204 chef
+       205 waiter
+
+SQL> select * from ep;
+
+     EMPNO  POSTINGNO DAY        SHIFT
+---------- ---------- ---------- ----------
+         1        201 Monday     allocate
+         2        202 Tuesday    notallocat
+         3        203 Friday     allocate
+         4        204 Monday     allocate
+         5        205 Friday     notallocat
+
+
+
+
+SQL> Select name,payrate from position,employee,ep Where empno=emp_no and postingno=posting_no and shift=’allocate’;
+
+NAME               PAYRATE
+--------------- ----------
+seema                25423
+geeta                65423
+suhas                55423
+
+SQL> Select emp_no from position, employee,ep Where empno=emp_no and posting_no=postingno and ep.postingno=’201’ and position.skill!=’waiter’;
+
+     EMPNO
+----------
+         1
+
+SQL> Select name from position, employee,ep Where empno=emp_no and postingno=posting_no and position.skill=’chef’ and shift=’allocate’;
+
+NAME
+---------------
+suhas
+
+SQL> alter table employee add workdate date;
+
+Table altered.
+
+SQL> update employee set workdate='1-Mar-2010' where emp_no=1;
+
+1 row updated.
+
+SQL> update employee set workdate='2-feb-2012' where emp_no=2;
+
+1 row updated.
+
+SQL> update employee set workdate='13-dec-1999' where emp_no=3;
+
+1 row updated.
+
+SQL> update employee set workdate='21-nov-2013' where emp_no=4;
+
+1 row updated.
+
+SQL> update employee set workdate='11-oct-2012' where emp_no=5;
+
+1 row updated.
+
+SQL> Select emp_no,workdate from position, employee,ep Where empno=emp_no and posting_no=postingno and day in (’Tuesday’,’Friday’);
+
+     EMPNO WORKDATE
+---------- ---------
+         2 02-FEB-12
+         3 13-DEC-99
+         5 11-OCT-12
+
+SQL> Select shift,emp_no,name,position.skill,workdate from position, employee,ep Where emp_no=empno and posting_no=postingno order by shift;
+
+SHIFT          EMP_NO NAME            SKILL           WORKDATE
+---------- ---------- --------------- --------------- ---------
+allocate            1 seema           manager         01-MAR-10
+allocate            3 geeta           cleark          13-DEC-99
+allocate            4 suhas           chef            21-NOV-13
+notallocat          5 sachin          waiter          11-OCT-12
+notallocat          2 sheeta          supervisor      02-FEB-12
+
+
+
+
+

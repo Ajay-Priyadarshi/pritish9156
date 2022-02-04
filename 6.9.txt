@@ -1,0 +1,149 @@
+SQL> create table bill(billno int primary key,day date,tableno int,total int);
+
+Table created.
+
+SQL> create table menu(dish_no int primary key,ddesc varchar(20),price int,check(price>0));
+
+Table created.
+
+SQL> create table bm(bill_no int references bill,dishno int references menu,quantity int);
+
+Table created.
+
+SQL> Insert into bill values(301,’8 Jan 2013’,1,1000);
+
+1 row created.
+
+SQL> Insert into bill values(302,’1 Dec 2013’,2,1020);
+
+1 row created.
+
+SQL> Insert into bill values(303,’23 Feb 2014’,3,3424);
+
+1 row created.
+
+SQL> Insert into bill values(304,’8 Jan 2013’,2,2422);
+
+1 row created.
+
+SQL> Insert into bill values(305,’30 Nov 2013’,6,1000);
+
+1 row created.
+
+SQL> Insert into menu values(211,’Pav Bhaji’,600);
+
+1 row created.
+
+SQL> Insert into menu values(212,’Panner Mahkanwala’,634);
+
+1 row created.
+
+SQL> Insert into menu values(213,’Roti’,20);
+
+1 row created.
+
+SQL> Insert into menu values(214,’Kaju Masala’,345);
+
+1 row created.
+
+SQL> Insert into bm values(301,211,3);
+
+1 row created.
+
+SQL> Insert into bm values(302,212,2);
+
+1 row created.
+
+SQL> Insert into bm values(302,213,4);
+
+1 row created.
+
+SQL> Insert into bm values(303,214,1);
+
+1 row created.
+
+SQL> Insert into bm values(303,213,5);
+
+1 row created.
+
+SQL> Insert into bm values(304,212,1);
+
+1 row created.
+
+SQL> Insert into bm values(304,213,4);
+
+1 row created.
+
+SQL> select * from bill;
+
+    BILLNO DAY          TABLENO      TOTAL
+---------- --------- ---------- ----------
+       301 08-JAN-13          1       1000
+       302 01-DEC-13          2       1020
+       303 23-FEB-14          3       3424
+       304 08-JAN-13          2       2422
+       305 30-NOV-13          6       1000
+
+
+SQL> select * from menu;
+
+   DISH_NO DDESC                     PRICE
+---------- -------------------- ----------
+       211 Pav Bhaji                   600
+       212 Panner Mahkanwala           634
+       213 Roti                         20
+       214 Kaju Masala                 345
+
+SQL> select * from bm;
+
+   BILL_NO     DISHNO   QUANTITY
+---------- ---------- ----------
+       301        211          3
+       302        212          2
+       302        213          4
+       303        214          1
+       303        213          5
+       304        212          1
+       304        213          4
+
+SQL> Select bill_no,ddesc,price,total,quantity from bill,menu,bm Where billno=bill_no and dishno=dish_no order by ddesc;
+
+   BILL_NO DDESC                     PRICE      TOTAL   QUANTITY
+---------- -------------------- ---------- ---------- ----------
+       303 Kaju Masala                 345       3424          1
+       302 Panner Mahkanwala           634       1020          2
+       304 Panner Mahkanwala           634       2422          1
+       301 Pav Bhaji                   600       1000          3
+       304 Roti                         20       2422          4
+       302 Roti                         20       1020          4
+       303 Roti                         20       3424          5
+
+7 rows selected.
+
+SQL> Select sum(price) from bill,menu,bm Where billno=bill_no and dishno=dish_no and day=’8 Jan 2013’;
+
+SUM(PRICE)
+----------
+      1254
+
+SQL> Select count(dishno) from bill,menu,bm Where billno=bill_no and dishno=dish_no and bill_no=’301’;
+
+COUNT(DISHNO)
+-------------
+            1
+
+SQL> Select bill_no,ddesc,price,total from bill,menu,bm Where billno=bill_no and dishno=dish_no and price between 100 and 500;
+
+   BILL_NO DDESC                     PRICE      TOTAL
+---------- -------------------- ---------- ----------
+       303 Kaju Masala                 345       3424
+
+SQL> Select count(bill_no),tableno from bill,menu,bm Where billno=bill_no and dish_no=dishno and day=’1 Dec 2013’ group by tableno;
+
+COUNT(BILL_NO)    TABLENO
+-------------- ----------
+             2          2
+
+
+
+

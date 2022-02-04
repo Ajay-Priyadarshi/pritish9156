@@ -1,0 +1,129 @@
+SQL> create table customer(cust_no int primary key,cust_name varchar(15),addr varchar(15),city varchar(10));
+
+Table created.
+
+SQL> create table loan1(loan_no int primary key,loan_amt int,check(loan_amt>0));
+
+Table created.
+
+SQL> insert into loan1 values(101,1200000);
+
+1 row created.
+
+SQL> insert into loan1 values(102,1300000);
+
+1 row created.
+
+SQL> insert into loan1 values(103,25000);
+
+1 row created.
+
+SQL> insert into loan1 values(104,55000);
+
+1 row created.
+
+SQL> insert into customer values(1,'vijay','wadgaon','pimpri');
+
+1 row created.
+
+SQL> insert into customer values(2,'raj','wadgaon','pimpri');
+
+1 row created.
+
+SQL> insert into customer values(3,'sarika','loheagaon','pune');
+
+1 row created.
+
+SQL> insert into customer values(4,'savatkar','wagholi','pune');
+
+1 row created.
+
+SQL> select * from loan1;
+
+   LOAN_NO   LOAN_AMT
+---------- ----------
+       101    1200000
+       102    1300000
+       103      25000
+       104      55000
+
+SQL> select * from customer;
+
+   CUST_NO CUST_NAME       ADDR            CITY
+---------- --------------- --------------- ----------
+         1 vijay           wadgaon         pimpri
+         2 raj             wadgaon         pimpri
+         3 sarika          loheagaon       pune
+         4 savatkar        wagholi         pune
+
+SQL> insert into cust_loan1 values(1,101);
+
+1 row created.
+
+SQL> insert into cust_loan1 values(2,102);
+
+1 row created.
+
+SQL> insert into cust_loan1 values(3,101);
+
+1 row created.
+
+SQL> insert into cust_loan1 values(4,104);
+
+1 row created.
+
+SQL> insert into cust_loan1 values(4,103);
+
+1 row created.
+
+SQL> select * from cust_loan1;
+
+   CUST_NO    LOAN_NO
+---------- ----------
+         1        101
+         2        102
+         3        101
+         4        104
+         4        103
+
+SQL> select cust_name from customer,loan1,cust_loan1 where customer.cust_no=cust_loan1.cust_no and loan1.loan_no=cust_loan1.loan_no and loan_amt>1000000;
+
+CUST_NAME
+---------------
+vijay
+sarika
+raj
+
+SQL> select cust_name from customer where cust_name like 'sa%';
+
+CUST_NAME
+---------------
+sarika
+savatkar
+
+SQL> select cust_name from customer,cust_loan1 where customer.cust_no=cust_loan.cust_no and city='pimpri' order by cust_name desc;
+
+CUST_NAME
+---------------
+vijay
+raj
+
+SQL> select cust_name,city from customer,loan1,cust_loan1 where customer.cust_no=cust_loan1.cust_no and loan1.loan_no=cust_loan1.loan_no and city='pimpri' order by cust_name desc;
+
+CUST_NAME       CITY
+--------------- ----------
+vijay           pimpri
+raj             pimpri
+
+SQL> select customer.cust_no,cust_name,addr,city from customer,loan1,cust_loan1 where customer.cust_no=cust_loan1.cust_no and loan1.loan_no=cust_loan1.loan_no and loan1.loan_amt in (select max (loan1.loan_amt) from loan1);
+
+   CUST_NO CUST_NAME       ADDR            CITY
+---------- --------------- --------------- ----------
+         2 raj             wadgaon         pimpri
+
+SQL> select sum(loan1.loan_amt) from loan1;
+
+SUM(LOAN1.LOAN_AMT)
+-------------------
+            2580000
+
